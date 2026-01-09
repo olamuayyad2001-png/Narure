@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>اختبر معلوماتك البيئية</title>
+  <style>
+    :root {
+      --bg: #f7f4ea;
+      --text: #1f4d2b;
+      --accent: #ff8a3d;
+      --green: #4caf50;
+      --blue: #3aa0ff;
+      --yellow: #ffd54f;
+      --card: #ffffff;
+      --muted: #6b7a6f;
+    }
+    body {
+      margin: 0;
+      font-family: "Tajawal", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: linear-gradient(180deg, var(--bg), #eef7f0 60%);
+      color: var(--text);
+    }
+    header {
+      background: var(--bg);
+      border-bottom: 2px solid #e6e0cf;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: var(--text);
+    }
+    .brand .leaf {
+      width: 28px; height: 28px;
+      background: radial-gradient(circle at 30% 30%, #7bd389, var(--green));
+      border-radius: 50% 60% 50% 60%;
+      transform: rotate(-20deg);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .menu {
+      width: 24px; height: 18px; position: relative;
+    }
+    .menu span {
+      position: absolute; right: 0; left: 0;
+      height: 3px; background: var(--text); border-radius: 3px;
+    }
+    .menu span:nth-child(1){ top: 0; }
+    .menu span:nth-child(2){ top: 7px; width: 70%; }
+    .menu span:nth-child(3){ bottom: 0; width: 50%; }
+
+    .hero {
+      max-width: 1000px; margin: 0 auto; padding: 24px 20px 8px;
+      text-align: center;
+    }
+    .hero h1 {
+      margin: 0 0 8px; font-size: 28px; font-weight: 900;
+    }
+    .hero p {
+      margin: 0 0 16px; color: var(--muted); font-weight: 600;
+    }
+    .start-btn {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff; font-weight: 800; border: none; border-radius: 14px;
+      padding: 12px 22px; cursor: pointer; box-shadow: 0 6px 0 #d66a1f;
+      transition: transform .1s ease, box-shadow .1s ease;
+    }
+    .start-btn:active { transform: translateY(2px); box-shadow: 0 4px 0 #d66a1f; }
+
+    .canvas-wrap {
+      max-width: 1000px; margin: 18px auto; padding: 0 20px;
+    }
+    .card {
+      background: var(--card); border-radius: 18px; box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+    .grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 0; border-top: 1px solid #eef0ea;
+    }
+    .tile {
+      padding: 18px; border-right: 1px solid #eef0ea; border-bottom: 1px solid #eef0ea;
+    }
+    .tile:nth-child(2n){ border-right: none; }
+    .tile svg { width: 100%; height: 220px; display: block; }
+    .tile h3 { margin: 10px 0 0; font-size: 16px; color: var(--text); }
+
+    .quiz {
+      max-width: 1000px; margin: 24px auto; padding: 0 20px;
+    }
+    .q-card {
+      background: var(--card); border-radius: 18px; box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+      padding: 18px;
+    }
+    .q-header {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
+    }
+    .progress {
+      height: 10px; background: #e9f3ea; border-radius: 999px; overflow: hidden;
+    }
+    .progress > div {
+      height: 100%; width: 0%; background: linear-gradient(90deg, var(--green), #7bd389);
+      transition: width .3s ease;
+    }
+    .options { display: grid; gap: 10px; margin-top: 12px; }
+    .option {
+      background: #f7fbf8; border: 2px solid #e2efe5; border-radius: 14px; padding: 12px;
+      cursor: pointer; font-weight: 700; transition: transform .08s ease, border-color .2s ease;
+    }
+    .option:hover { transform: translateY(-1px); border-color: #cfe4d4; }
+    .option.correct { border-color: #4caf50; background: #eaf7ec; }
+    .option.wrong { border-color: #ff6b6b; background: #ffecec; }
+    .footer {
+      display: flex; gap: 10px; margin-top: 14px; justify-content: space-between; align-items: center;
+    }
+    .next-btn, .reset-btn {
+      background: var(--blue); color: #fff; border: none; border-radius: 12px; padding: 10px 16px;
+      font-weight: 800; cursor: pointer;
+    }
+    .reset-btn { background: #7b8a8f; }
+    .score {
+      font-weight: 800; color: var(--text);
+    }
+    .tip {
+      margin-top: 10px; background: #fffbe6; border: 2px dashed #ffd54f; border-radius: 12px; padding: 10px;
+      color: #7a6a2b; font-weight: 700;
+    }
+    @media (max-width: 720px){
+      .grid { grid-template-columns: 1fr; }
+      .tile { border-right: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="leaf" aria-hidden="true"></div>
+      <span>اختبر معلوماتك البيئية</span>
+    </div>
+    <div class="menu" aria-label="قائمة">
+      <span></span><span></span><span></span>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>كيف نحافظ على توازن الطبيعة؟</h1>
+    <p>ابدأ رحلة قصيرة وممتعة—أسئلة كرتونية، ملاحظات محفّزة، ونصائح عملية.</p>
+    <button class="start-btn" id="startBtn">ابدأ الاختبار</button>
+  </section>
+
+  <!-- كرتون توعوي (SVG مدمج) -->
+  <section class="canvas-wrap">
+    <div class="card">
+      <div class="grid">
+        <!-- إعادة التدوير -->
+        <div class="tile">
+          <svg viewBox="0 0 400 220" role="img" aria-label="إعادة التدوير">
+            <rect x="0" y="0" width="400" height="220" fill="#eaf7ec"/>
+            <circle cx="340" cy="40" r="26" fill="#ffd54f"/>
+            <rect x="40" y="140" width="80" height="60" rx="10" fill="#3aa0ff"/>
+            <path d="M80 160 l10 -10 l10 10 l-10 10 z" fill="#fff"/>
+            <circle cx="180" cy="120" r="26" fill="#ff8a3d"/>
+            <rect x="160" y="100" width="40" height="60" rx="20" fill="#ffd1b3"/>
+            <rect x="170" y="130" width="20" height="30" rx="10" fill="#ff8a3d"/>
+            <text x="40" y="135" font-size="14" fill="#1f4d2b">إعادة التدوير</text>
+          </svg>
+          <h3>افرز النفايات—البسيط يصنع فرقًا كبيرًا.</h3>
+        </div>
+        <!-- النقل النظيف -->
+        <div class="tile">
+          <svg viewBox="0 0 400 220" role="img" aria-label="الدراجات والنقل النظيف">
+            <rect x="0" y="0" width="400" height="220" fill="#e6f3ff"/>
+            <path d="M20 180 H380" stroke="#7bd389" stroke-width="6"/>
+            <circle cx="120" cy="170" r="26" fill="#4caf50"/>
+            <circle cx="220" cy="170" r="26" fill="#4caf50"/>
+            <rect x="160" y="90" width="40" height="60" rx="20" fill="#ffd1b3"/>
+            <rect x="150" y="80" width="60" height="20" rx="10" fill="#ffd54f"/>
+            <text x="20" y="40" font-size="14" fill="#1f4d2b">النقل النظيف</text>
+          </svg>
+          <h3>اختر المشي أو الدراجة لمسافات قريبة.</h3>
+        </div>
+        <!-- الطاقة المتجددة -->
+        <div class="tile">
+          <svg viewBox="0 0 400 220" role="img" aria-label="الطاقة المتجددة">
+            <rect x="0" y="0" width="400" height="220" fill="#fff7e6"/>
+            <circle cx="60" cy="50" r="24" fill="#ffd54f"/>
+            <rect x="240" y="140" width="100" height="40" fill="#3aa0ff"/>
+            <line x1="240" y1="140" x2="340" y2="180" stroke="#fff" stroke-width="2"/>
+            <rect x="80" y="120" width="10" height="60" fill="#cfd8dc"/>
+            <circle cx="85" cy="120" r="6" fill="#cfd8dc"/>
+            <line x1="85" y1="120" x2="60" y2="150" stroke="#cfd8dc" stroke-width="6"/>
+            <line x1="85" y1="120" x2="110" y2="150" stroke="#cfd8dc" stroke-width="6"/>
+            <text x="20" y="200" font-size="14" fill="#1f4d2b">طاقة متجددة</text>
+          </svg>
+          <h3>ادعم الشمس والرياح—نظيفة ووفيرة.</h3>
+        </div>
+        <!-- التشجير -->
+        <div class="tile">
+          <svg viewBox="0 0 400 220" role="img" aria-label="التشجير">
+            <rect x="0" y="0" width="400" height="220" fill="#eef7f0"/>
+            <rect x="180" y="90" width="40" height="60" rx="20" fill="#ffd1b3"/>
+            <circle cx="200" cy="70" r="20" fill="#ff8a3d"/>
+            <rect x="90" y="150" width="20" height="40" fill="#8d6e63"/>
+            <circle cx="100" cy="140" r="26" fill="#7bd389"/>
+            <circle cx="120" cy="150" r="20" fill="#7bd389"/>
+            <text x="20" y="40" font-size="14" fill="#1f4d2b">التشجير</text>
+          </svg>
+          <h3>ازرع شجرة—أكسجين، ظل، وحياة.</h3>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- الاختبار -->
+  <section class="quiz" id="quizSection" hidden>
+    <div class="q-card">
+      <div class="q-header">
+        <strong>سؤال <span id="qIndex">1</span> من <span id="qTotal">5</span></strong>
+        <div class="progress" aria-label="التقدم">
+          <div id="progressBar"></div>
+        </div>
+      </div>
+      <div id="questionText" style="font-weight:800; font-size:18px;">...</div>
+      <div class="options" id="options"></div>
+      <div class="footer">
+        <button class="next-btn" id="nextBtn" disabled>التالي</button>
+        <button class="reset-btn" id="resetBtn">إعادة</button>
+        <div class="score">نتيجتك: <span id="score">0</span></div>
+      </div>
+      <div class="tip" id="tipBox" hidden></div>
+    </div>
+  </section>
+
+  <script>
+    const questions = [
+      {
+        q: "أي خيار يقلل انبعاثات الكربون يوميًا؟",
+        options: ["استخدام السيارة لكل المشاوير", "المشي أو ركوب الدراجة للمسافات القريبة", "تشغيل المكيف طوال اليوم"],
+        correct: 1,
+        tip: "النقل النشط يحسن الصحة ويقلل التلوث."
+      },
+      {
+        q: "أفضل طريقة للتعامل مع النفايات المنزلية؟",
+        options: ["خلط كل شيء في كيس واحد", "الفرز إلى إعادة تدوير/عضوي/بلاستيك", "حرق النفايات في الحديقة"],
+        correct: 1,
+        tip: "الفرز يرفع معدلات إعادة التدوير ويقلل مكبات النفايات."
+      },
+      {
+        q: "ما المصدر الأنظف للطاقة؟",
+        options: ["الفحم", "الطاقة الشمسية والرياح", "الديزل"],
+        correct: 1,
+        tip: "المتجددة تقلل الانبعاثات وتدعم أمن الطاقة."
+      },
+      {
+        q: "كيف نحافظ على التنوع الحيوي؟",
+        options: ["قطع الأشجار العشوائي", "حماية الموائل وزراعة الأشجار المحلية", "الصيد الجائر"],
+        correct: 1,
+        tip: "الموائل الصحية تحفظ التوازن البيئي."
+      },
+      {
+        q: "ما العادة اليومية الأكثر توفيرًا للماء؟",
+        options: ["فتح الصنبور أثناء تنظيف الأسنان", "إصلاح التسريبات واستخدام مرشات موفرة", "غسل السيارة يوميًا"],
+        correct: 1,
+        tip: "كل قطرة تُحدث فرقًا—وفّر الماء لتدعم الأنظمة البيئية."
+      }
+    ];
+
+    const startBtn = document.getElementById('startBtn');
+    const quizSection = document.getElementById('quizSection');
+    const qIndexEl = document.getElementById('qIndex');
+    const qTotalEl = document.getElementById('qTotal');
+    const questionText = document.getElementById('questionText');
+    const optionsEl = document.getElementById('options');
+    const nextBtn = document.getElementById('nextBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const scoreEl = document.getElementById('score');
+    const progressBar = document.getElementById('progressBar');
+    const tipBox = document.getElementById('tipBox');
+
+    let current = 0;
+    let score = 0;
+    let answered = false;
+
+    qTotalEl.textContent = questions.length;
+
+    function renderQuestion() {
+      const q = questions[current];
+      qIndexEl.textContent = current + 1;
+      questionText.textContent = q.q;
+      optionsEl.innerHTML = '';
+      tipBox.hidden = true;
+      nextBtn.disabled = true;
+      answered = false;
+
+      q.options.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'option';
+        btn.textContent = opt;
+        btn.onclick = () => selectOption(i);
+        optionsEl.appendChild(btn);
+      });
+
+      progressBar.style.width = ((current) / questions.length) * 100 + '%';
+    }
+
+    function selectOption(i) {
+      if (answered) return;
+      answered = true;
+      const q = questions[current];
+      const buttons = Array.from(document.querySelectorAll('.option'));
+      buttons.forEach((b, idx) => {
+        if (idx === q.correct) b.classList.add('correct');
+        else if (idx === i) b.classList.add('wrong');
+        b.disabled = true;
+      });
+      if (i === q.correct) score++;
+      scoreEl.textContent = score;
+      tipBox.textContent = "نصيحة: " + q.tip;
+      tipBox.hidden = false;
+      nextBtn.disabled = false;
+    }
+
+    function nextQuestion() {
+      if (current < questions.length - 1) {
+        current++;
+        renderQuestion();
+      } else {
+        questionText.textContent = "أحسنت! أنهيت الاختبار.";
+        optionsEl.innerHTML = '';
+        nextBtn.disabled = true;
+        progressBar.style.width = '100%';
+        tipBox.textContent = score >= Math.ceil(questions.length * 0.7)
+          ? "نتيجتك رائعة! استمر في نشر العادات الخضراء."
+          : "خطوات صغيرة يوميًا تصنع أثرًا كبيرًا—اختر عادة واحدة وابدأ الآن.";
+        tipBox.hidden = false;
+      }
+    }
+
+    function resetQuiz() {
+      current = 0; score = 0; answered = false;
+      scoreEl.textContent = score;
+      renderQuestion();
+    }
+
+    startBtn.addEventListener('click', () => {
+      quizSection.hidden = false;
+      renderQuestion();
+      window.scrollTo({ top: quizSection.offsetTop, behavior: 'smooth' });
+    });
+    nextBtn.addEventListener('click', nextQuestion);
+    resetBtn.addEventListener('click', resetQuiz);
+  </script>
+</body>
+</html>
